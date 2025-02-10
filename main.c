@@ -1,5 +1,4 @@
-#include <mlx.h>
-#include <stdlib.h>
+#include "mlx_linux/mlx.h"
 
 typedef struct s_data {
 	void	*mlx;
@@ -20,7 +19,7 @@ void scale_image(t_data *d, void *img)
 	char	*src;
 
 	for (int y=0; y<64; y++) {
-		*src = (o + (y / 8 * bp[1]) + (y % 8 * bp[0] / 8));
+		src = (o + (y / 8 * bp[1]) + (y % 8 * bp[0] / 8));
 		for (int dy = 0; dy < d->scale; dy++)
 			for (int dx = 0; dx < d->scale; dx++)
 				for (int i = 0; i < bp[0] / 8; i++)
@@ -62,7 +61,8 @@ int main()
 {
 	t_data	data;
 
-	init(&data, 20, 15, 20);
+	
+	init(&data, 20, 15, 8);
 	create_grid(&data);
 	mlx_loop(data.mlx);
 }
