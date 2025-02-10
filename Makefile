@@ -1,8 +1,8 @@
 NAME_EXEC = so_long
 LIBFT = libft/libft.a
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -O2 -Lmlx_linux -lmlx_Linux -Imlx_linux -lXext -lX11
-OFLAGS = -Wall -Wextra -Werror -g -O2
+CFLAGS = -Wall -Wextra -g -O2 -Lmlx_linux -lmlx_Linux -Imlx_linux -lXext -lX11
+OFLAGS = -Wall -Wextra -g -O2
 
 # Source files
 EXEC_SRCS = main.c

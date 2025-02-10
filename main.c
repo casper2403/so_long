@@ -1,68 +1,58 @@
 #include "mlx_linux/mlx.h"
+#include <stdlib.h>
+
+#define TILE_SIZE 64
 
 typedef struct s_data {
-	void	*mlx;
-	void	*win;
-	void	*tile_img;
-	int		scale;
-	int		tile_size;
-	int		grid_w;
-	int		grid_h;
+    void    *mlx;
+    void    *win;
+    void    *tile_img;
+    int     win_width;
+    int     win_height;
+    int     grid_cols;
+    int     grid_rows;
 }   t_data;
 
-void scale_image(t_data *d, void *img)
-{
-	int		bp[3];
-	char	*o = mlx_get_data_addr(img, bp, bp + 1, bp + 2);
-	void	*s = mlx_new_image(d->mlx, 8 * d->scale, 8 * d->scale);
-	char	*n = mlx_get_data_addr(s, (int[1]){0}, (int[1]){0}, (int[1]){0});
-	char	*src;
-
-	for (int y=0; y<64; y++) {
-		src = (o + (y / 8 * bp[1]) + (y % 8 * bp[0] / 8));
-		for (int dy = 0; dy < d->scale; dy++)
-			for (int dx = 0; dx < d->scale; dx++)
-				for (int i = 0; i < bp[0] / 8; i++)
-					n[((y / 8 * d->scale + dy) * 8 * d->scale + y % 8 * d->scale + dx) * bp[0] / 8 + i]
-						= src[i];
-	}
-	d->tile_img = s;
+int init(t_data *data, int cols, int rows) {
+    data->mlx = mlx_init();
+    if (!data->mlx) return (0);
+    data->grid_cols = cols;
+    data->grid_rows = rows;
+    data->win_width = cols * TILE_SIZE;
+    data->win_height = rows * TILE_SIZE;
+    data->win = mlx_new_window(data->mlx, data->win_width, data->win_height, "Tile Grid");
+    if (!data->win) return (0);
+    int img_width, img_height;
+    data->tile_img = mlx_xpm_file_to_image(data->mlx, "sprites/cave water stalagmite.xpm", &img_width, &img_height);
+    if (!data->tile_img || img_width != TILE_SIZE || img_height != TILE_SIZE) {
+        return (0);
+    }
+    return (1);
 }
 
-void init(t_data *data, int grid_w, int grid_h, int scale)
-{
-	void	*original_img;
-	int		orig_w = 8, orig_h = 8;
+void create_grid(t_data *data) {
+    int x, y;
 
-	data->scale = scale;
-	data->tile_size = 8 * scale;
-	data->grid_w = grid_w;
-	data->grid_h = grid_h;
-	data->mlx = mlx_init();
-	original_img = mlx_xpm_file_to_image(data->mlx, "tile.xpm", &orig_w, &orig_h);
-	scale_image(data, original_img);
-	data->win = mlx_new_window(data->mlx,
-							data->grid_w * data->tile_size,
-							data->grid_h * data->tile_size,
-							"Scaled Grid");
-	mlx_destroy_image(data->mlx, original_img);
+    y = -1;
+    while (++y < data->grid_rows) {
+        x = -1;
+        while (++x < data->grid_cols) {
+            mlx_put_image_to_window(
+                data->mlx, data->win, data->tile_img,
+                x * TILE_SIZE,
+                y * TILE_SIZE
+            );
+        }
+    }
 }
 
-void    create_grid(t_data *data)
-{
-	for (int y = 0; y < data->grid_h; y++)
-		for (int x = 0; x < data->grid_w; x++)
-			mlx_put_image_to_window(data->mlx, data->win, data->tile_img,
-				x * data->tile_size,
-				y * data->tile_size);
-}
+int main(int argc, char **argv) {
+    t_data data;
 
-int main()
-{
-	t_data	data;
-
-	
-	init(&data, 20, 15, 8);
-	create_grid(&data);
-	mlx_loop(data.mlx);
+    if (!init(&data, 20, 15)) {
+        exit(1);
+    }
+    create_grid(&data);
+    mlx_loop(data.mlx);
+    return (0);
 }
