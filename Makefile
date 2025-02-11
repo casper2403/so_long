@@ -1,9 +1,9 @@
 NAME_EXEC = so_long
 LIBFT = lib/libft/libft.a
+MLX = lib/mlx_linux/libmlx_Linux.a
 CC = cc
 CFLAGS = -Wall -Wextra -g -O2 -Llib/mlx_linux -lmlx_Linux -Ilib/mlx_linux -lXext -lX11
 OFLAGS = -Wall -Wextra -g -O2
-MLX = lib/mlx_linux/libmlx_Linux.a
 
 # Source files
 EXEC_SRCS = src/main.c
