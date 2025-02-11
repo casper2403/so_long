@@ -1,4 +1,4 @@
-#include "mlx_linux/mlx.h"
+#include "../lib/mlx_linux/mlx.h"
 #include <stdlib.h>
 
 #define TILE_SIZE 64
@@ -23,7 +23,7 @@ int init(t_data *data, int cols, int rows) {
     data->win = mlx_new_window(data->mlx, data->win_width, data->win_height, "Tile Grid");
     if (!data->win) return (0);
     int img_width, img_height;
-    data->tile_img = mlx_xpm_file_to_image(data->mlx, "sprites/cave water stalagmite.xpm", &img_width, &img_height);
+    data->tile_img = mlx_xpm_file_to_image(data->mlx, "assets/sprites/cave water stalagmite.xpm", &img_width, &img_height);
     if (!data->tile_img || img_width != TILE_SIZE || img_height != TILE_SIZE) {
         return (0);
     }
