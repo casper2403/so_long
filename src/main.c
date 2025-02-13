@@ -1,4 +1,5 @@
 #include "../lib/mlx_linux/mlx.h"
+#include "../lib/libft/libft.h"
 #include <stdlib.h>
 
 #define TILE_SIZE 64
