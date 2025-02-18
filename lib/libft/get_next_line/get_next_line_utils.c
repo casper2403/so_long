@@ -35,7 +35,7 @@ char	*ft_gnl_strjoin(char *s1, char *s2)
 		s1 = ft_strdup("");
 	if (!s2)
 		s2 = ft_strdup("");
-	tot_len = ft_strlen(s1) + ft_strlen(s2);
+	tot_len = ft_gnl_strlen(s1) + ft_gnl_strlen(s2);
 	strjoin = malloc((tot_len + 1) * sizeof(char));
 	if (!strjoin)
 		return (NULL);
@@ -51,7 +51,7 @@ char	*ft_gnl_strjoin(char *s1, char *s2)
 	return (strjoin);
 }
 
-size_t	ft_strlen(const char *s)
+size_t	ft_gnl_strlen(const char *s)
 {
 	size_t	size;
 
@@ -71,7 +71,7 @@ char	*ft_strdup(const char *s)
 	size_t	i;
 
 	i = 0;
-	len = ft_strlen(s);
+	len = ft_gnl_strlen(s);
 	new = malloc(len + 1);
 	if (!new)
 		return (NULL);
@@ -88,7 +88,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	size_t	src_len;
 	size_t	i;
 
-	src_len = ft_strlen(src);
+	src_len = ft_gnl_strlen(src);
 	if (!size)
 		return (src_len);
 	i = 0;

@@ -15,15 +15,21 @@
 
 # define TILE_SIZE 64
 
+# include <fcntl.h>
 typedef struct s_data
 {
 	void	*mlx;
 	void	*win;
+	void	*wall_img;
+	void	*player_img;
 	void	*tile_img;
+	void	*collectible_img;
+	void	*exit_img;
 	int		win_width;
 	int		win_height;
 	int		grid_cols;
 	int		grid_rows;
+	char	**map;
 }	t_data;
 
 #endif
