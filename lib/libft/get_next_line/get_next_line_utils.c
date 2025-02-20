@@ -32,9 +32,9 @@ char	*ft_gnl_strjoin(char *s1, char *s2)
 	size_t	j;
 
 	if (!s1)
-		s1 = ft_strdup("");
+		s1 = ft_gnl_strdup("");
 	if (!s2)
-		s2 = ft_strdup("");
+		s2 = ft_gnl_strdup("");
 	tot_len = ft_gnl_strlen(s1) + ft_gnl_strlen(s2);
 	strjoin = malloc((tot_len + 1) * sizeof(char));
 	if (!strjoin)
@@ -64,7 +64,7 @@ size_t	ft_gnl_strlen(const char *s)
 	return (size);
 }
 
-char	*ft_strdup(const char *s)
+char	*ft_gnl_strdup(const char *s)
 {
 	size_t	len;
 	char	*new;

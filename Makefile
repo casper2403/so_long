@@ -8,7 +8,7 @@ OFLAGS		= -Wall -Wextra -g -O2
 OBJ		= obj
 
 # Source files
-EXEC_SRCS	= src/main.c
+EXEC_SRCS	= src/main.c src/floodfill.c src/movement.c
 
 # Object files in the obj folder
 EXEC_OBJS	= $(EXEC_SRCS:src/%.c=obj/%.o)

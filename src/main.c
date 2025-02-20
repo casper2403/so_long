@@ -9,21 +9,30 @@
 /*   Updated: 2025/02/17 15:27:53 by cstevens         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../lib/mlx_linux/mlx.h"
-#include "../lib/libft/libft.h"
 #include "so_long.h"
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <X11/keysym.h>
 
 int	key_hook(int keycode, t_data *data)
 {
+	int	dx;
+	int	dy;
+
+	dx = 0;
+	dy = 0;
 	if (keycode == XK_Escape)
 	{
 		mlx_destroy_window(data->mlx, data->win);
 		exit(0);
 	}
+	else if (keycode == XK_w || keycode == XK_Up)
+		dy = -1;
+	else if (keycode == XK_s || keycode == XK_Down)
+		dy = 1;
+	else if (keycode == XK_a || keycode == XK_Left)
+		dx = -1;
+	else if (keycode == XK_d || keycode == XK_Right)
+		dx = 1;
+	if (dx || dy)
+		move_player(data, dx, dy);
 	return (0);
 }
 
@@ -74,7 +83,7 @@ int	init(t_data *data)
 	return (1);
 }
 
-void	put_tile(int x, int y, t_data *data)
+int	put_tile(int x, int y, t_data *data)
 {
 	char	tile;
 	void	*img;
@@ -91,9 +100,10 @@ void	put_tile(int x, int y, t_data *data)
 	else if (tile == 'E')
 		img = data->exit_img;
 	else
-		img = data->tile_img;
+		return (write(1, "Error\nMap contains invalid character", 36));
 	mlx_put_image_to_window(data->mlx, data->win, img,
 		x * TILE_SIZE, y * TILE_SIZE);
+	return (0);
 }
 
 int	read_map(char *filename, t_data *data)
@@ -102,14 +112,17 @@ int	read_map(char *filename, t_data *data)
 	char	*line;
 	int		count;
 	char	**tmp;
+	int		i;
+	int		found;
 
 	count = 0;
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (1);
 	data->map = NULL;
+	found = 0;
 	line = get_next_line(fd);
-	while (line != NULL)
+	while (line)
 	{
 		tmp = realloc(data->map, sizeof(char *) * (count + 2));
 		if (!tmp)
@@ -118,19 +131,38 @@ int	read_map(char *filename, t_data *data)
 			return (1);
 		}
 		data->map = tmp;
+		/* Remove trailing newline, if any */
+		if (ft_strlen(line) && line[ft_strlen(line) - 1] == '\n')
+			line[ft_strlen(line) - 1] = '\0';
 		data->map[count] = line;
+		i = 0;
+		while (line[i])
+		{
+			if (line[i] == 'P' && !found)
+			{
+				data->player_x = i;
+				data->player_y = count;
+				found = 1;
+			}
+			i++;
+		}
 		count++;
-		data->grid_cols = ft_strlen(line);
 		line = get_next_line(fd);
 	}
-	data->grid_rows = count;
 	if (data->map)
 		data->map[count] = NULL;
+	data->grid_rows = count;
+	if (data->grid_rows > 0)
+		data->grid_cols = ft_strlen(data->map[0]);
+	else
+		data->grid_cols = 0;
 	close(fd);
+	if (!found)
+		return (1);
 	return (0);
 }
 
-void	create_grid(t_data *data)
+int	create_grid(t_data *data)
 {
 	int	x;
 	int	y;
@@ -140,8 +172,10 @@ void	create_grid(t_data *data)
 	{
 		x = -1;
 		while (++x < data->grid_cols)
-			put_tile(x, y, data);
+			if (put_tile(x, y, data))
+				return (1);
 	}
+	return (0);
 }
 
 void	print_map(t_data *data)
@@ -151,7 +185,7 @@ void	print_map(t_data *data)
 	i = 0;
 	while (data->map && data->map[i])
 	{
-		ft_printf("%s", data->map[i]);
+		ft_printf("%s\n", data->map[i]);
 		i++;
 	}
 }
@@ -165,11 +199,14 @@ int	main(int argc, char **argv)
 	if (read_map(argv[1], &data))
 		exit(1);
 	print_map(&data);
+	if (!ft_floodfill(&data))
+		exit(1);
 	if (!init(&data))
 		exit(1);
 	if (!init_textures(&data))
 		exit(1);
-	create_grid(&data);
+	if (create_grid(&data))
+		exit(1);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, 0, close_window, &data);
 	mlx_loop(data.mlx);

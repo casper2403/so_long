@@ -52,7 +52,7 @@ int	read_file(char **saved, int fd)
 	char	*temp;
 
 	if (!*saved)
-		*saved = ft_strdup("");
+		*saved = ft_gnl_strdup("");
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (-1);
@@ -101,7 +101,7 @@ char	*save_remainder(char *saved)
 		return (NULL);
 	}
 	i++;
-	remainder = ft_strdup(saved + i);
+	remainder = ft_gnl_strdup(saved + i);
 	if (!remainder)
 		free(saved);
 	if (!remainder)

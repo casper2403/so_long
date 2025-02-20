@@ -16,6 +16,12 @@
 # define TILE_SIZE 64
 
 # include <fcntl.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <X11/keysym.h>
+# include "../lib/mlx_linux/mlx.h"
+# include "../lib/libft/libft.h"
+
 typedef struct s_data
 {
 	void	*mlx;
@@ -29,7 +35,13 @@ typedef struct s_data
 	int		win_height;
 	int		grid_cols;
 	int		grid_rows;
+	int		player_x;
+	int		player_y;
 	char	**map;
 }	t_data;
+
+int	ft_floodfill(t_data *data);
+void	move_player(t_data *data, int dx, int dy);
+int	create_grid(t_data *data);
 
 #endif

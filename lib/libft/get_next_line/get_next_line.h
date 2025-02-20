@@ -20,7 +20,7 @@
 #  define BUFFER_SIZE 42
 # endif
 
-char	*ft_strdup(const char *s);
+char	*ft_gnl_strdup(const char *s);
 char	*get_next_line(int fd);
 int		ft_isinstr(char *str);
 char	*ft_gnl_strjoin(char *s1, char *s2);
