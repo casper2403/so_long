@@ -1,5 +1,21 @@
 #include "so_long.h"
 
+int check_collectibles(t_data *data)
+{
+	int	x;
+	int	y;
+
+	y = -1;
+	while (++y < data->grid_rows)
+	{
+		x = -1;
+		while (++x < data->grid_cols)
+			if (data->map[y][x] == 'C')
+				return (0);
+	}
+	return (1);
+}
+
 void	move_player(t_data *data, int dx, int dy)
 {
 	int	new_x;
@@ -22,5 +38,21 @@ void	move_player(t_data *data, int dx, int dy)
 		mlx_clear_window(data->mlx, data->win);
 		create_grid(data);
 		ft_printf("Amount of moves: %d\n", moves++);
+	}
+	else if (tile == 'E')
+	{
+		if (check_collectibles(data))
+		{
+			data->map[data->player_y][data->player_x] = '0';
+			data->map[new_y][new_x] = 'P';
+			data->player_x = new_x;
+			data->player_y = new_y;
+			mlx_clear_window(data->mlx, data->win);
+			create_grid(data);
+			ft_printf("Amount of moves: %d\n", moves++);
+			ft_printf("You've won!!!\n");
+			mlx_destroy_window(data->mlx, data->win);
+			exit(0);
+		}
 	}
 }

@@ -15,9 +15,9 @@ else
 endif
 badd +1 src/main.c
 badd +1 src/so_long.h
-badd +1 maps/test.ber
+badd +2 maps/test.ber
 badd +2 src/floodfill.c
-badd +0 src/movement.c
+badd +1 src/movement.c
 argglobal
 %argdel
 $argadd src/main.c
@@ -31,10 +31,7 @@ wincmd _ | wincmd |
 vsplit
 wincmd _ | wincmd |
 vsplit
-wincmd _ | wincmd |
-vsplit
-4wincmd h
-wincmd w
+3wincmd h
 wincmd w
 wincmd w
 wincmd w
@@ -47,11 +44,10 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 95 + 239) / 479)
-exe 'vert 2resize ' . ((&columns * 95 + 239) / 479)
-exe 'vert 3resize ' . ((&columns * 95 + 239) / 479)
-exe 'vert 4resize ' . ((&columns * 95 + 239) / 479)
-exe 'vert 5resize ' . ((&columns * 95 + 239) / 479)
+exe 'vert 1resize ' . ((&columns * 95 + 191) / 383)
+exe 'vert 2resize ' . ((&columns * 95 + 191) / 383)
+exe 'vert 3resize ' . ((&columns * 95 + 191) / 383)
+exe 'vert 4resize ' . ((&columns * 95 + 191) / 383)
 argglobal
 balt src/movement.c
 setlocal foldmethod=manual
@@ -64,7 +60,7 @@ setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 5 - ((4 * winheight(0) + 59) / 119)
+let s:l = 5 - ((4 * winheight(0) + 53) / 106)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -87,7 +83,7 @@ setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 59) / 119)
+let s:l = 1 - ((0 * winheight(0) + 53) / 106)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -110,7 +106,7 @@ setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 2 - ((1 * winheight(0) + 59) / 119)
+let s:l = 2 - ((1 * winheight(0) + 53) / 106)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -133,42 +129,18 @@ setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 59) / 119)
+let s:l = 6 - ((5 * winheight(0) + 53) / 106)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
-normal! 0
-wincmd w
-argglobal
-if bufexists(fnamemodify("maps/test.ber", ":p")) | buffer maps/test.ber | else | edit maps/test.ber | endif
-if &buftype ==# 'terminal'
-  silent file maps/test.ber
-endif
-balt src/so_long.h
-setlocal foldmethod=manual
-setlocal foldexpr=0
-setlocal foldmarker={{{,}}}
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldenable
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 59) / 119)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 1
+keepjumps 6
 normal! 0
 wincmd w
 2wincmd w
-exe 'vert 1resize ' . ((&columns * 95 + 239) / 479)
-exe 'vert 2resize ' . ((&columns * 95 + 239) / 479)
-exe 'vert 3resize ' . ((&columns * 95 + 239) / 479)
-exe 'vert 4resize ' . ((&columns * 95 + 239) / 479)
-exe 'vert 5resize ' . ((&columns * 95 + 239) / 479)
+exe 'vert 1resize ' . ((&columns * 95 + 191) / 383)
+exe 'vert 2resize ' . ((&columns * 95 + 191) / 383)
+exe 'vert 3resize ' . ((&columns * 95 + 191) / 383)
+exe 'vert 4resize ' . ((&columns * 95 + 191) / 383)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

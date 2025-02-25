@@ -131,7 +131,6 @@ int	read_map(char *filename, t_data *data)
 			return (1);
 		}
 		data->map = tmp;
-		/* Remove trailing newline, if any */
 		if (ft_strlen(line) && line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
 		data->map[count] = line;
@@ -195,7 +194,10 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	if (argc < 2)
+	{
+		ft_printf("Error\nusage: ./so_long <mapname>\n");
 		exit(1);
+	}
 	if (read_map(argv[1], &data))
 		exit(1);
 	print_map(&data);
