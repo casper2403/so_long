@@ -60,7 +60,6 @@ void	move_player(t_data *data, int dx, int dy)
 		{
 			replace_tile(data, new_x, new_y, &moves);
 			ft_printf("You've won!!!\n");
-			mlx_destroy_window(data->mlx, data->win);
 			clean_resources(data);
 			exit(0);
 		}

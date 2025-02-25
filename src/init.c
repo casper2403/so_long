@@ -18,23 +18,19 @@ int	init_textures(t_data *data)
 	int	img_height;
 
 	data->wall_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/cavewater.xpm",
-			&img_width, &img_height);
+			"assets/sprites/cavewater.xpm", &img_width, &img_height);
 	data->player_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/landcoralblack.xpm",
-			&img_width, &img_height);
+			"assets/sprites/landcoralblack.xpm", &img_width, &img_height);
 	data->tile_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/path.xpm",
-			&img_width, &img_height);
+			"assets/sprites/path.xpm", &img_width, &img_height);
 	data->collectible_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/coral blue.xpm",
-			&img_width, &img_height);
+			"assets/sprites/coral blue.xpm", &img_width, &img_height);
 	data->exit_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/coralyellow.xpm",
-			&img_width, &img_height);
+			"assets/sprites/coralyellow.xpm", &img_width, &img_height);
 	if (!data->wall_img || !data->player_img || !data->tile_img
 		|| !data->collectible_img || !data->exit_img)
 	{
+		ft_printf("Error\nAssets could not be found\n");
 		clean_resources(data);
 		return (0);
 	}
