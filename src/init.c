@@ -31,7 +31,6 @@ int	init_textures(t_data *data)
 		|| !data->collectible_img || !data->exit_img)
 	{
 		ft_printf("Error\nAssets could not be found\n");
-		clean_resources(data);
 		return (0);
 	}
 	return (1);
