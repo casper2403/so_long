@@ -1,9 +1,4 @@
 #include "so_long.h"
-// no/multiple exit
-// no/multiple player
-// at least one collectible
-// check rectangular
-// check not closed
 
 int	check_exit(t_data *data)
 {

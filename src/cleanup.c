@@ -1,15 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cstevens <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/25 19:32:08 by cstevens          #+#    #+#             */
+/*   Updated: 2025/02/25 19:32:10 by cstevens         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 void	free_map(char **map)
 {
-    int	i;
+	int	i;
 
-    if (!map)
-        return ;
-    i = -1;
-    while (map[++i])
-        free(map[i]);
-    free(map);
+	if (!map)
+		return ;
+	i = -1;
+	while (map[++i])
+		free(map[i]);
+	free(map);
 }
 
 void	clean_resources(t_data *data)
