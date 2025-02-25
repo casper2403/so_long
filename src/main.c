@@ -20,7 +20,7 @@ int	key_hook(int keycode, t_data *data)
 	dy = 0;
 	if (keycode == XK_Escape)
 	{
-		mlx_destroy_window(data->mlx, data->win);
+		clean_resources(data);
 		exit(0);
 	}
 	else if (keycode == XK_w || keycode == XK_Up)
@@ -38,9 +38,8 @@ int	key_hook(int keycode, t_data *data)
 
 int	close_window(t_data *data)
 {
-	mlx_destroy_window(data->mlx, data->win);
+	clean_resources(data);
 	exit(0);
-	return (0);
 }
 
 int	init_textures(t_data *data)
@@ -65,7 +64,10 @@ int	init_textures(t_data *data)
 			&img_width, &img_height);
 	if (!data->wall_img || !data->player_img || !data->tile_img ||
 		!data->collectible_img || !data->exit_img)
+	{
+		clean_resources(data);
 		return (0);
+	}
 	return (1);
 }
 
@@ -100,7 +102,7 @@ int	put_tile(int x, int y, t_data *data)
 	else if (tile == 'E')
 		img = data->exit_img;
 	else
-		return (write(1, "Error\nMap contains invalid character", 36));
+		return (ft_printf("Error\nInvalid map\n"));
 	mlx_put_image_to_window(data->mlx, data->win, img,
 		x * TILE_SIZE, y * TILE_SIZE);
 	return (0);
@@ -112,15 +114,12 @@ int	read_map(char *filename, t_data *data)
 	char	*line;
 	int		count;
 	char	**tmp;
-	int		i;
-	int		found;
 
 	count = 0;
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (1);
 	data->map = NULL;
-	found = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -128,36 +127,20 @@ int	read_map(char *filename, t_data *data)
 		if (!tmp)
 		{
 			free(line);
+			free_map(data->map);
 			return (1);
 		}
 		data->map = tmp;
 		if (ft_strlen(line) && line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
 		data->map[count] = line;
-		i = 0;
-		while (line[i])
-		{
-			if (line[i] == 'P' && !found)
-			{
-				data->player_x = i;
-				data->player_y = count;
-				found = 1;
-			}
-			i++;
-		}
 		count++;
 		line = get_next_line(fd);
 	}
 	if (data->map)
 		data->map[count] = NULL;
 	data->grid_rows = count;
-	if (data->grid_rows > 0)
-		data->grid_cols = ft_strlen(data->map[0]);
-	else
-		data->grid_cols = 0;
 	close(fd);
-	if (!found)
-		return (1);
 	return (0);
 }
 
@@ -191,7 +174,7 @@ void	print_map(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	t_data	data;
+	t_data	data = {0};
 
 	if (argc < 2)
 	{
@@ -199,18 +182,25 @@ int	main(int argc, char **argv)
 		exit(1);
 	}
 	if (read_map(argv[1], &data))
+	{
+		ft_printf("Error\nFile descriptor issue (probably)\n");
+		clean_resources(&data);
 		exit(1);
+	}
 	print_map(&data);
-	if (!ft_floodfill(&data))
-		exit(1);
-	if (!init(&data))
-		exit(1);
-	if (!init_textures(&data))
-		exit(1);
-	if (create_grid(&data))
-		exit(1);
+    if (!ft_mapcheck(&data) || !ft_floodfill(&data))
+    {
+        clean_resources(&data);
+        exit(1);
+    }
+	if (!init(&data) || !init_textures(&data) || create_grid(&data))
+    {
+        clean_resources(&data);
+        exit(1);
+    }
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, 0, close_window, &data);
 	mlx_loop(data.mlx);
+	clean_resources(&data);
 	return (0);
 }

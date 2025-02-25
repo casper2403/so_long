@@ -18,6 +18,7 @@ badd +1 src/so_long.h
 badd +2 maps/test.ber
 badd +2 src/floodfill.c
 badd +1 src/movement.c
+badd +0 src/map_check.c
 argglobal
 %argdel
 $argadd src/main.c
@@ -31,7 +32,10 @@ wincmd _ | wincmd |
 vsplit
 wincmd _ | wincmd |
 vsplit
-3wincmd h
+wincmd _ | wincmd |
+vsplit
+4wincmd h
+wincmd w
 wincmd w
 wincmd w
 wincmd w
@@ -44,10 +48,11 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 95 + 191) / 383)
-exe 'vert 2resize ' . ((&columns * 95 + 191) / 383)
-exe 'vert 3resize ' . ((&columns * 95 + 191) / 383)
-exe 'vert 4resize ' . ((&columns * 95 + 191) / 383)
+exe 'vert 1resize ' . ((&columns * 76 + 191) / 383)
+exe 'vert 2resize ' . ((&columns * 76 + 191) / 383)
+exe 'vert 3resize ' . ((&columns * 76 + 191) / 383)
+exe 'vert 4resize ' . ((&columns * 76 + 191) / 383)
+exe 'vert 5resize ' . ((&columns * 75 + 191) / 383)
 argglobal
 balt src/movement.c
 setlocal foldmethod=manual
@@ -95,7 +100,7 @@ if bufexists(fnamemodify("src/floodfill.c", ":p")) | buffer src/floodfill.c | el
 if &buftype ==# 'terminal'
   silent file src/floodfill.c
 endif
-balt src/main.c
+balt src/map_check.c
 setlocal foldmethod=manual
 setlocal foldexpr=0
 setlocal foldmarker={{{,}}}
@@ -112,6 +117,29 @@ keepjumps exe s:l
 normal! zt
 keepjumps 2
 normal! 078|
+wincmd w
+argglobal
+if bufexists(fnamemodify("src/map_check.c", ":p")) | buffer src/map_check.c | else | edit src/map_check.c | endif
+if &buftype ==# 'terminal'
+  silent file src/map_check.c
+endif
+balt src/floodfill.c
+setlocal foldmethod=manual
+setlocal foldexpr=0
+setlocal foldmarker={{{,}}}
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldenable
+silent! normal! zE
+let &fdl = &fdl
+let s:l = 1 - ((0 * winheight(0) + 53) / 106)
+if s:l < 1 | let s:l = 1 | endif
+keepjumps exe s:l
+normal! zt
+keepjumps 1
+normal! 0
 wincmd w
 argglobal
 if bufexists(fnamemodify("src/so_long.h", ":p")) | buffer src/so_long.h | else | edit src/so_long.h | endif
@@ -136,11 +164,12 @@ normal! zt
 keepjumps 6
 normal! 0
 wincmd w
-2wincmd w
-exe 'vert 1resize ' . ((&columns * 95 + 191) / 383)
-exe 'vert 2resize ' . ((&columns * 95 + 191) / 383)
-exe 'vert 3resize ' . ((&columns * 95 + 191) / 383)
-exe 'vert 4resize ' . ((&columns * 95 + 191) / 383)
+4wincmd w
+exe 'vert 1resize ' . ((&columns * 76 + 191) / 383)
+exe 'vert 2resize ' . ((&columns * 76 + 191) / 383)
+exe 'vert 3resize ' . ((&columns * 76 + 191) / 383)
+exe 'vert 4resize ' . ((&columns * 76 + 191) / 383)
+exe 'vert 5resize ' . ((&columns * 75 + 191) / 383)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

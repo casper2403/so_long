@@ -57,65 +57,37 @@ static void	flood_fill(char **map, int x, int y, int rows, int cols)
 	flood_fill(map, x, y - 1, rows, cols);
 }
 
-int	ft_floodfill(t_data *data)
+int ft_floodfill(t_data *data)
 {
-	char	**dup;
-	int		rows;
-	int		cols;
-	int		i;
-	int		j;
-	int		start_x;
-	int		start_y;
+    char    **dup;
+    int     rows = data->grid_rows;
+    int     i;
+    int     j;
 
-	rows = data->grid_rows;
-	cols = data->grid_cols;
-	start_x = -1;
-	start_y = -1;
-	i = 0;
-	while (i < rows)
-	{
-		j = 0;
-		while (j < cols)
-		{
-			if (data->map[i][j] == 'P')
-			{
-				start_y = i;
-				start_x = j;
-				break ;
-			}
-			j++;
-		}
-		if (start_x != -1)
-			break ;
-		i++;
-	}
-	if (start_x == -1)
-		return (0);
-	dup = dup_map(data->map, rows);
-	if (!dup)
-		return (0);
-	flood_fill(dup, start_x, start_y, rows, cols);
-	i = 0;
-	while (i < rows)
-	{
-		j = 0;
-		while (j < cols)
-		{
-			if (dup[i][j] == 'C' || dup[i][j] == 'E')
-			{
-				while (i >= 0)
-					free(dup[i--]);
-				free(dup);
-				write(1, "Error\nMap is not solveable", 26);
-				return (0);
-			}
-			j++;
-		}
-		i++;
-	}
-	i = 0;
-	while (dup[i])
-		free(dup[i++]);
-	free(dup);
-	return (1);
+    dup = dup_map(data->map, rows);
+    if (!dup)
+        return (0);
+    flood_fill(dup, data->player_x, data->player_y, rows, data->grid_cols);
+    i = -1;
+    while (++i < rows)
+    {
+        j = -1;
+        while (++j < data->grid_cols)
+        {
+            if (dup[i][j] == 'C' || dup[i][j] == 'E')
+            {
+                int k = -1;
+                while (++k < rows)
+                    free(dup[k]);
+                free(dup);
+                ft_printf("Error\nNo valid path\n");
+                return (0);
+            }
+        }
+    }
+    i = -1;
+    while (dup[++i])
+        free(dup[i]);
+    free(dup);
+    return (1);
 }

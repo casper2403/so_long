@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   movement.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cstevens <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/25 12:55:51 by cstevens          #+#    #+#             */
+/*   Updated: 2025/02/25 12:55:58 by cstevens         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 int check_collectibles(t_data *data)
@@ -52,6 +64,7 @@ void	move_player(t_data *data, int dx, int dy)
 			ft_printf("Amount of moves: %d\n", moves++);
 			ft_printf("You've won!!!\n");
 			mlx_destroy_window(data->mlx, data->win);
+			clean_resources(data);
 			exit(0);
 		}
 	}

@@ -43,5 +43,8 @@ typedef struct s_data
 int	ft_floodfill(t_data *data);
 void	move_player(t_data *data, int dx, int dy);
 int	create_grid(t_data *data);
+int	ft_mapcheck(t_data *data);
+void	clean_resources(t_data *data);
+void	free_map(char **map);
 
 #endif
