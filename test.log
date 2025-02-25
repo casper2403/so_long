@@ -1,0 +1,39 @@
+
+=== Valgrind leak summary for maps/invalid_multiple_exits.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_multiple_players.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_no_collectible.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_no_exit.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_no_player.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_non_rectangular.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_surround.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_valid_path1.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_valid_path2.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/invalid_valid_path3.ber ===
+==========================================
+
+=== Valgrind leak summary for maps/valid1.ber ===
+==9962== LEAK SUMMARY:
+==9962==    definitely lost: 0 bytes in 0 blocks
+==9962==    indirectly lost: 0 bytes in 0 blocks
+==9962==      possibly lost: 0 bytes in 0 blocks
+==9962==    still reachable: 199,344 bytes in 1,815 blocks
+==9962==         suppressed: 0 bytes in 0 blocks
+==========================================

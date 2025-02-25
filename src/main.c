@@ -42,108 +42,6 @@ int	close_window(t_data *data)
 	exit(0);
 }
 
-int	init_textures(t_data *data)
-{
-	int	img_width;
-	int	img_height;
-
-	data->wall_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/cavewater.xpm",
-			&img_width, &img_height);
-	data->player_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/landcoralblack.xpm",
-			&img_width, &img_height);
-	data->tile_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/path.xpm",
-			&img_width, &img_height);
-	data->collectible_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/coral blue.xpm",
-			&img_width, &img_height);
-	data->exit_img = mlx_xpm_file_to_image(data->mlx,
-			"assets/sprites/coralyellow.xpm",
-			&img_width, &img_height);
-	if (!data->wall_img || !data->player_img || !data->tile_img ||
-		!data->collectible_img || !data->exit_img)
-	{
-		clean_resources(data);
-		return (0);
-	}
-	return (1);
-}
-
-int	init(t_data *data)
-{
-	data->mlx = mlx_init();
-	if (!data->mlx)
-		return (0);
-	data->win_width = data->grid_cols * TILE_SIZE;
-	data->win_height = data->grid_rows * TILE_SIZE;
-	data->win = mlx_new_window(data->mlx, data->win_width,
-			data->win_height, "Tile Grid");
-	if (!data->win)
-		return (0);
-	return (1);
-}
-
-int	put_tile(int x, int y, t_data *data)
-{
-	char	tile;
-	void	*img;
-
-	tile = data->map[y][x];
-	if (tile == '1')
-		img = data->wall_img;
-	else if (tile == '0')
-		img = data->tile_img;
-	else if (tile == 'C')
-		img = data->collectible_img;
-	else if (tile == 'P')
-		img = data->player_img;
-	else if (tile == 'E')
-		img = data->exit_img;
-	else
-		return (ft_printf("Error\nInvalid map\n"));
-	mlx_put_image_to_window(data->mlx, data->win, img,
-		x * TILE_SIZE, y * TILE_SIZE);
-	return (0);
-}
-
-int	read_map(char *filename, t_data *data)
-{
-	int		fd;
-	char	*line;
-	int		count;
-	char	**tmp;
-
-	count = 0;
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		return (1);
-	data->map = NULL;
-	line = get_next_line(fd);
-	while (line)
-	{
-		tmp = realloc(data->map, sizeof(char *) * (count + 2));
-		if (!tmp)
-		{
-			free(line);
-			free_map(data->map);
-			return (1);
-		}
-		data->map = tmp;
-		if (ft_strlen(line) && line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = '\0';
-		data->map[count] = line;
-		count++;
-		line = get_next_line(fd);
-	}
-	if (data->map)
-		data->map[count] = NULL;
-	data->grid_rows = count;
-	close(fd);
-	return (0);
-}
-
 int	create_grid(t_data *data)
 {
 	int	x;
@@ -174,8 +72,9 @@ void	print_map(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	t_data	data = {0};
+	t_data	data;
 
+	ft_bzero(&data, sizeof(data));
 	if (argc < 2)
 	{
 		ft_printf("Error\nusage: ./so_long <mapname>\n");
@@ -187,17 +86,12 @@ int	main(int argc, char **argv)
 		clean_resources(&data);
 		exit(1);
 	}
-	print_map(&data);
-    if (!ft_mapcheck(&data) || !ft_floodfill(&data))
-    {
-        clean_resources(&data);
-        exit(1);
-    }
-	if (!init(&data) || !init_textures(&data) || create_grid(&data))
-    {
-        clean_resources(&data);
-        exit(1);
-    }
+	if (!ft_mapcheck(&data) || !ft_floodfill(&data)
+		|| !init(&data) || !init_textures(&data) || create_grid(&data))
+	{
+		clean_resources(&data);
+		exit(1);
+	}
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
 	mlx_hook(data.win, 17, 0, close_window, &data);
 	mlx_loop(data.mlx);

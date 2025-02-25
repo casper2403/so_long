@@ -40,11 +40,24 @@ typedef struct s_data
 	char	**map;
 }	t_data;
 
-int	ft_floodfill(t_data *data);
+typedef struct s_flood_fill
+{
+	char	**map;
+	int		rows;
+	int		cols;
+}	t_flood_fill;
+
+int		ft_floodfill(t_data *data);
 void	move_player(t_data *data, int dx, int dy);
-int	create_grid(t_data *data);
-int	ft_mapcheck(t_data *data);
+int		create_grid(t_data *data);
+int		ft_mapcheck(t_data *data);
 void	clean_resources(t_data *data);
 void	free_map(char **map);
+int		check_closed(t_data *data);
+int		check_rectangle(t_data *data);
+int		init(t_data *data);
+int		init_textures(t_data *data);
+int		put_tile(int x, int y, t_data *data);
+int		read_map(char *filename, t_data *data);
 
 #endif
